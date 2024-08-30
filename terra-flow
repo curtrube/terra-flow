@@ -3,28 +3,25 @@
 set -e
 
 # plan, apply, destroy, test
-tf_action=$1
-name="Curtis"
-echo "Hello $name"
-echo "Seclected terraform version: $1"
 
 POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -e|--extension)
-      TF_ACTION="$2"
+    -a|--action)
+      ACTION="$2"
       shift # past argument
       shift # past value
       ;;
-    -s|--searchpath)
-      SEARCHPATH="$2"
+    -v|--version)
+      VERSION="$2"
       shift # past argument
       shift # past value
       ;;
-    --default)
-      DEFAULT=YES
+    -e|--environment)
+      ENVIRONMENT="$2"
       shift # past argument
+      shift
       ;;
     -*|--*)
       echo "Unknown option $1"
@@ -37,6 +34,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-terraform init
+echo "Terraform Action: $ACTION"
+echo "Terraform Version: $VERSION"
+echo "Environment: $ENVIRONMENT"
+echo $POSITIONAL_ARGS
 
-terraform validate
+#terraform init
+
+#terraform validate
