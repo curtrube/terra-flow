@@ -10,3 +10,7 @@ jobs:
       - name: get terraform version
         run: | 
           terraform --version
+          
+      - name: print env
+        run: |
+          echo ${{ env }}
