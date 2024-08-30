@@ -13,4 +13,5 @@ jobs:
           
       - name: print env
         run: |
-          echo ${{ env }}
+          echo "${{ env.ACCOUNT_ID }}"
+
