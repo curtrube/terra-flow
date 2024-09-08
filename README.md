@@ -1,15 +1,12 @@
-# terra-flow
+# Terra-Flow
 
-`terra-flow` is a GitHub actions workflow for running terraform.
+`Terra-Flow` is a GitHub actions workflow for running terraform via GitHub Actions.
 
-## Requirements
+## Prerequisites
 
-- must support the main commands:
-  - init Prepare your working directory for other commands
-  - validate Check whether the configuration is valid
-  - plan Show changes required by the current configuration
-  - apply Create or update infrastructure
-  - destroy Destroy previously-created infrastructure
-- must utilize remote backend and state locking
-- must support input variables
-- must be able to set desired terraform version
+Terraform assumes the following is already in place:
+
+1. Remote state backend and locking table:
+   Bucket name: `terraform-state-${AWS_ACCOUNT_ID}`
+   DynamoDB table name: `terraform-lock-${AWS_ACCOUNT_ID}`
+1. SSM parameters to lookup AWS Account ID's based on aws account prefix and environment
