@@ -2,24 +2,50 @@
 
 set -e
 
-# plan, apply, destroy, test
+# default args
+TF_ACTION="plan"
+TF_VERSION="1.9.5"
+TF_WORKSPACE=""
+TF_ROOT_DIR="."
+ENVIRONMENT="dev"
+AWS_REGION="us-east-1"
 
 POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     -a|--action)
-      ACTION="$2"
+      TF_ACTION="$2"
       shift # past argument
       shift # past value
       ;;
     -v|--version)
-      VERSION="$2"
+      TF_VERSION="$2"
       shift # past argument
       shift # past value
       ;;
+    -w|--workspace)
+      TF_WORKSPACE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -d|--directory)
+      TF_ROOT_DIR="$2"
+      shift # past argument
+      shift
+      ;;
     -e|--environment)
       ENVIRONMENT="$2"
+      shift # past argument
+      shift
+      ;;
+    -i|--aws_account_id)
+      AWS_ACCOUNT_ID="$2"
+      shift # past argument
+      shift
+      ;;
+    -r|--region)
+      AWS_REGION="$2"
       shift # past argument
       shift
       ;;
@@ -28,17 +54,58 @@ while [[ $# -gt 0 ]]; do
       exit 1
       ;;
     *)
-      POSITIONAL_ARGS+=("$1") # save positional arg
-      shift # past argument
-      ;;
+    POSITIONAL_ARGS+=("$1") # save positional arg
+    shift # past argument
+    ;;
   esac
 done
 
-echo "Terraform Action: $ACTION"
-echo "Terraform Version: $VERSION"
-echo "Environment: $ENVIRONMENT"
-echo $POSITIONAL_ARGS
+echo "Entered terra-flow"
 
-#terraform init
+echo $TF_ACTION
+echo $TF_VERSION
+echo $TF_ROOT_DIR
+echo $TF_WORKSPACE
+echo $ENVIRONMENT
+echo $AWS_ACCOUNT_ID
+echo $AWS_REGION
 
-#terraform validate
+# generate workflow variables
+variables=$(cat <<EOF
+variable "environment" {
+  default = "$ENVIRONMENT"
+}
+EOF
+)
+echo "$variables" > "./$TF_ROOT_DIR/vars.tf"
+
+# generate remote state backend
+backend_config=$(cat <<EOF
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-$AWS_ACCOUNT_ID"
+    key            = "$TF_WORKSPACE/$ENVIRONMENT.terraform.tfstate"
+    region         = "$AWS_REGION"
+    encrypt        = true
+    dynamodb_table = "terraform-lock-$AWS_ACCOUNT_ID"
+  }
+}
+EOF
+)
+echo "$backend_config" > "./$TF_ROOT_DIR/backend.tf"
+
+cd $TF_ROOT_DIR
+
+terraform init
+terraform validate
+
+echo "terraform $TF_ACTION -var-file=environments/$ENVIRONMENT.tfvars"
+if [ "$TF_ACTION" = "plan" ]; then
+  terraform plan -var-file=environments/$ENVIRONMENT.tfvars
+elif [ "$TF_ACTION" = "apply" ]; then
+  terraform apply -var-file=environments/$ENVIRONMENT.tfvars --auto-approve
+elif [ "$TF_ACTION" = "destroy" ]; then
+  terraform destroy -var-file=environments/$ENVIRONMENT.tfvars --auto-approve
+else
+  echo "Invalid action $TF_ACTION"
+fi

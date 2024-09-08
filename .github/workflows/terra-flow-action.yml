@@ -1,0 +1,59 @@
+name: terra-flow-action-workflow
+
+on:
+  workflow_call:
+    inputs:
+      terraform_action:
+        description: Terraform action to execute i.e. plan, apply, destroy
+        required: true
+        type: string
+      terraform_version:
+        description: Terraform version
+        default: 1.9
+        type: string
+      terraform_workspace:
+        description: Terraform workspace
+        required: true
+        type: string
+      terraform_directory:
+        description: Terraform root directory
+        required: true
+        type: string
+      environment:
+        description: Environment name test, dev, prod
+        required: true
+        type: string
+      aws_account_id:
+        description: AWS account id
+        required: true
+        type: string
+      region:
+        description: AWS region name
+        default: us-east-1
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terra-flow-run:
+    name: terra-flow-${{ inputs.terraform_action }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout terra-flow
+        uses: actions/checkout@v4
+
+      - name: Terra Flow ${{ inputs.terraform_action }}
+        run: |
+          chmod +x terra-flow/terra-flow
+          terra-flow/terra-flow \
+            -a ${{ inputs.terraform_action }} \
+            -v ${{ inputs.terraform_version }} \
+            -w ${{ inputs.terraform_workspace }} \
+            -d ${{ inputs.terraform_directory }} \
+            -e ${{ inputs.environment }} \
+            -i ${{ inputs.aws_account_id }} \
+            -r ${{ inputs.region }}
+        shell: bash
