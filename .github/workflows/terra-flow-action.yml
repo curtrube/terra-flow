@@ -65,15 +65,6 @@ jobs:
         with:
           terraform_version: ${{ inputs.terraform_version }}
 
-      - name: Print terra flow inputs
-        run: | 
-          echo "Terraform Action: ${{ inputs.terraform_action }}"
-          echo "Terraform Workspace: ${{ inputs.terraform_workspace }}"
-          echo "Terraform Directory: ${{ inputs.terraform_directory }}"
-          echo "Environment: ${{ inputs.environment }}"
-          echo "AWS Account Id: ${{ inputs.aws_account_id }}"
-          echo "AWS Region: ${{ inputs.aws_region }}"
-
       - name: Terra Flow ${{ inputs.terraform_action }}
         run: |
           chmod +x terra-flow/terra-flow
