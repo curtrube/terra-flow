@@ -4,7 +4,6 @@ set -e
 
 # default args
 TF_ACTION="plan"
-TF_VERSION="1.9.5"
 TF_WORKSPACE=""
 TF_ROOT_DIR="."
 ENVIRONMENT="dev"
@@ -16,11 +15,6 @@ while [[ $# -gt 0 ]]; do
   case $1 in
     -a|--action)
       TF_ACTION="$2"
-      shift # past argument
-      shift # past value
-      ;;
-    -v|--version)
-      TF_VERSION="$2"
       shift # past argument
       shift # past value
       ;;
@@ -63,7 +57,6 @@ done
 echo "Entered terra-flow"
 
 echo "Terraform Action: $TF_ACTION"
-echo "Terraform Version: $TF_VERSION"
 echo "Terraform Root Dir: $TF_ROOT_DIR"
 echo "Terraform Workspace: $TF_WORKSPACE"
 echo "Environment: $ENVIRONMENT"

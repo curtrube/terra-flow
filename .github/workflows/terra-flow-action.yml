@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout terra-flow
+      - name: Checkout code repo
         uses: actions/checkout@v4
 
       - name: Checkout terra-flow
@@ -68,7 +68,6 @@ jobs:
       - name: Print terra flow inputs
         run: | 
           echo "Terraform Action: ${{ inputs.terraform_action }}"
-          echo "Terraform Version: ${{ inputs.terraform_version }}"
           echo "Terraform Workspace: ${{ inputs.terraform_workspace }}"
           echo "Terraform Directory: ${{ inputs.terraform_directory }}"
           echo "Environment: ${{ inputs.environment }}"
@@ -80,7 +79,6 @@ jobs:
           chmod +x terra-flow/terra-flow
           terra-flow/terra-flow \
             -a ${{ inputs.terraform_action }} \
-            -v ${{ inputs.terraform_version }} \
             -w ${{ inputs.terraform_workspace }} \
             -d ${{ inputs.terraform_directory }} \
             -e ${{ inputs.environment }} \
