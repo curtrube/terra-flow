@@ -44,6 +44,10 @@ jobs:
     steps:
       - name: Checkout terra-flow
         uses: actions/checkout@v4
+        with:
+          repository: curtrube/terra-flow
+          ref: main
+          path: terra-flow
       
       - name: list directory
         run: ls -la
