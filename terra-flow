@@ -62,13 +62,13 @@ done
 
 echo "Entered terra-flow"
 
-echo $TF_ACTION
-echo $TF_VERSION
-echo $TF_ROOT_DIR
-echo $TF_WORKSPACE
-echo $ENVIRONMENT
-echo $AWS_ACCOUNT_ID
-echo $AWS_REGION
+echo "Terraform Action: $TF_ACTION"
+echo "Terraform Version: $TF_VERSION"
+echo "Terraform Root Dir: $TF_ROOT_DIR"
+echo "Terraform Workspace: $TF_WORKSPACE"
+echo "Environment: $ENVIRONMENT"
+echo "AWS Account ID: $AWS_ACCOUNT_ID"
+echo "AWS Region: $AWS_REGION"
 
 # generate workflow variables
 variables=$(cat <<EOF

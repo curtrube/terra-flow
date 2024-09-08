@@ -12,7 +12,7 @@ on:
         default: 1.9
         type: string
       terraform_workspace:
-        description: Terraform workspace
+        description: Terraform workspace name
         required: true
         type: string
       terraform_directory:
