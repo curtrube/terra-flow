@@ -44,6 +44,9 @@ jobs:
     steps:
       - name: Checkout terra-flow
         uses: actions/checkout@v4
+      
+      - name: list directory
+        run: ls -la
 
       - name: AWS assume role with OIDC
         uses: aws-actions/configure-aws-credentials@v4
