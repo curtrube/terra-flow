@@ -27,7 +27,7 @@ on:
         description: AWS account id
         required: true
         type: string
-      region:
+      aws_region:
         description: AWS region name
         default: us-east-1
         type: string
@@ -62,6 +62,16 @@ jobs:
         with:
           terraform_version: ${{ inputs.terraform_version }}
 
+      - name: Print terra flow inputs
+        run: | 
+          echo "Terraform Action: ${{ inputs.terraform_action }}"
+          echo "Terraform Version: ${{ inputs.terraform_version }}"
+          echo "Terraform Workspace: ${{ inputs.terraform_workspace }}"
+          echo "Terraform Directory: ${{ inputs.terraform_directory }}"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "AWS Account Id: ${{ inputs.aws_account_id }}"
+          echo "AWS Region: ${{ inputs.aws_region }}"
+
       - name: Terra Flow ${{ inputs.terraform_action }}
         run: |
           chmod +x terra-flow/terra-flow
@@ -72,5 +82,5 @@ jobs:
             -d ${{ inputs.terraform_directory }} \
             -e ${{ inputs.environment }} \
             -i ${{ inputs.aws_account_id }} \
-            -r ${{ inputs.region }}
+            -r ${{ inputs.aws_region }}
         shell: bash
