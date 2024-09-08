@@ -63,16 +63,17 @@ jobs:
           role-to-assume: arn:aws:iam::992382678496:role/GitHubActionsAdminRole
       
       - name: Get AWS account id
+        id: get-account-id
         run: |
-          aws_account_id=$(aws ssm get-parameter --name "/accounts/${{ inputs.aws_account_prefix }}/${{ inputs.environment }}" --with-decryption --query "Parameter.Value")
-          echo $aws_account_id
+          aws_account_id=$(aws ssm get-parameter --name "/accounts/${{ inputs.aws_account_prefix }}/${{ inputs.environment }}" --with-decryption --query "Parameter.Value" --output text)
+          echo "AWS_ACCOUNT_ID=$aws_account_id" >> $GITHUB_OUTPUT
 
       # then assume access into the account the desired account
       - name: AWS assume role with OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::$aws_account_id:role/GitHubActionsAdminRole
+          role-to-assume: arn:aws:iam::${{ steps.get-account-id.outputs.AWS_ACCOUNT_ID }}:role/GitHubActionsAdminRole
 
       - uses: hashicorp/setup-terraform@v3
         with:
