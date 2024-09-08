@@ -45,6 +45,16 @@ jobs:
       - name: Checkout terra-flow
         uses: actions/checkout@v4
 
+      - name: AWS assume role with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::992382678496:role/GitHubActionsAdminRole
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
       - name: Terra Flow ${{ inputs.terraform_action }}
         run: |
           chmod +x terra-flow/terra-flow
