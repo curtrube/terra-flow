@@ -1,6 +1,6 @@
-# Terra-Flow
+# TerraFlow
 
-`Terra-Flow` is a GitHub actions workflow for running terraform via GitHub Actions.
+`TerraFlow` is a GitHub actions workflow for running terraform.
 
 ## Prerequisites
 
