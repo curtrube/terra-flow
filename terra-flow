@@ -76,11 +76,11 @@ echo "$variables" > "./$TF_ROOT_DIR/vars.tf"
 backend_config=$(cat <<EOF
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-$AWS_ACCOUNT_ID"
+    bucket         = "terraflow-state-$AWS_ACCOUNT_ID"
     key            = "$TF_WORKSPACE/$ENVIRONMENT.terraform.tfstate"
     region         = "$AWS_REGION"
     encrypt        = true
-    dynamodb_table = "terraform-lock-$AWS_ACCOUNT_ID"
+    dynamodb_table = "terraflow-lock-$AWS_ACCOUNT_ID"
   }
 }
 EOF
